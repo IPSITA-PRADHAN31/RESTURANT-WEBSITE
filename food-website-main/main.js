@@ -170,3 +170,47 @@ jQuery(window).on('load', function () {
 
     }
 });
+let cart = {
+    items: [],
+    total: 0
+};
+
+// Function to add item to cart
+function addToCart(name, price) {
+    cart.items.push({ name, price });
+    cart.total += price;
+    updateCartUI();
+}
+
+// Function to update the cart UI
+function updateCartUI() {
+    let cartItemsElement = document.getElementById('cartItems');
+    let cartTotalElement = document.getElementById('cartTotal');
+
+    // Clear previous cart items
+    cartItemsElement.innerHTML = '';
+
+    // Add current cart items
+    cart.items.forEach(item => {
+        let itemElement = document.createElement('div');
+        itemElement.classList.add('cart-item');
+        itemElement.textContent = `${item.name}: $${item.price}`;
+        cartItemsElement.appendChild(itemElement);
+    });
+
+    // Update total
+    cartTotalElement.textContent = cart.total;
+}
+
+// Add event listener to all + buttons
+document.addEventListener('DOMContentLoaded', function() {
+    let plusButtons = document.querySelectorAll('.dish-add-btn');
+    plusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            let dishBox = button.closest('.dish-box-wp');
+            let name = dishBox.querySelector('.dish-title .h3-title').textContent;
+            let price = parseInt(dishBox.querySelector('.dist-bottom-row ul li b').textContent.replace('Rs. ', ''));
+            addToCart(name, price);
+        });
+    });
+});
